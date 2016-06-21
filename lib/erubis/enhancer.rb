@@ -136,7 +136,7 @@ module Erubis
     end
 
     def evaluate(context=nil)
-      _src = @src
+      _src = Source.new @src
       if context.is_a?(Hash)
         context.each do |key, val| instance_variable_set("@#{key}", val) end
       elsif context
@@ -340,7 +340,7 @@ module Erubis
     SIMPLE_REGEXP = /<%(=+|\#)?(.*?)-?%>/m
 
     def convert(input)
-      src = ""
+      src = Source.new ""
       add_preamble(src)
       #regexp = pattern_regexp(@pattern)
       pos = 0
@@ -601,8 +601,9 @@ module Erubis
     attr_accessor :header, :footer
 
     def convert(input)
-      source = super
-      return @src = "#{@header}#{source}#{@footer}"
+      source = Source.new super
+      puts "cool"
+      return @src = Source.new("#{@header}#{source}#{@footer}")
     end
 
   end

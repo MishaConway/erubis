@@ -17,14 +17,14 @@ module Erubis
   class TinyEruby
 
     def initialize(input=nil)
-      @src = convert(input) if input
+      @src = Source.new convert(input) if input
     end
     attr_reader :src
 
     EMBEDDED_PATTERN = /<%(=+|\#)?(.*?)-?%>/m
 
     def convert(input)
-      src = "_buf = '';"           # preamble
+      src = Source.new "_buf = '';"           # preamble
       pos = 0
       input.scan(EMBEDDED_PATTERN) do |indicator, code|
         m = Regexp.last_match
@@ -78,7 +78,7 @@ module Erubis
 
     def initialize(input=nil, options={})
       @escape  = options[:escape] || 'Erubis::XmlHelper.escape_xml'
-      @src = convert(input) if input
+      @src = Source.new convert(input) if input
     end
 
     attr_reader :src
@@ -86,7 +86,7 @@ module Erubis
     EMBEDDED_PATTERN = /(^[ \t]*)?<\?rb(\s.*?)\?>([ \t]*\r?\n)?|@(!+)?\{(.*?)\}@/m
 
     def convert(input)
-      src = "_buf = '';"           # preamble
+      src = Source.new "_buf = '';"           # preamble
       pos = 0
       input.scan(EMBEDDED_PATTERN) do |lspace, stmt, rspace, indicator, expr|
         match = Regexp.last_match

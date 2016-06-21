@@ -1,69 +1,21 @@
-#!/usr/bin/ruby
+#require File.expand_path("../lib/erubis", __FILE__)
+# coding: utf-8
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'erubis'
 
-###
-### $Release: $
-### $Copyright$
-###
+Gem::Specification.new do |s|
+  s.name              = "erubis"
+  s.version           = Erubis::VERSION.dup
+  s.summary           = "Fast implementation of eRuby"
+  s.authors           = ["kuwata-lab.com"]
+  s.homepage          = "https://github.com/jeremyevans/erubis"
+  s.license           = "MIT"
+  s.files = %w'README.txt MIT-LICENSE CHANGES.txt setup.rb' + Dir['{lib,test}/**/*.rb']
+  s.require_paths = ["lib"]
 
-require 'rubygems' unless defined?(Gem)
+  puts "only including files #{Dir['{lib,test}/**/*.rb'].inspect}"
 
-spec = Gem::Specification.new do |s|
-  ## package information
-  s.name        = "erubis"
-  s.author      = "makoto kuwata"
-  s.email       = "kwa(at)kuwata-lab.com"
-  s.version     = "$Release$"
-  s.platform    = Gem::Platform::RUBY
-  s.homepage    = "http://www.kuwata-lab.com/erubis/"
-  s.summary     = "a fast and extensible eRuby implementation which supports multi-language"
-  s.rubyforge_project = 'erubis'
-  s.description = <<-'END'
-  Erubis is an implementation of eRuby and has the following features:
-
-  * Very fast, almost three times faster than ERB and about 10% faster than eruby.
-  * Multi-language support (Ruby/PHP/C/Java/Scheme/Perl/Javascript)
-  * Auto escaping support
-  * Auto trimming spaces around '<% %>'
-  * Embedded pattern changeable (default '<% %>')
-  * Enable to handle Processing Instructions (PI) as embedded pattern (ex. '<?rb ... ?>')
-  * Context object available and easy to combine eRuby template with YAML datafile
-  * Print statement available
-  * Easy to extend and customize in subclass
-  * Ruby on Rails support
-  END
-
-  ## files
-  files = []
-  files += Dir.glob('lib/**/*')
-  files += Dir.glob('bin/*')
-  files += Dir.glob('examples/**/*')
-  files += Dir.glob('test/**/*')
-  files += Dir.glob('doc/**/*')
-  files += %w[README.txt CHANGES.txt MIT-LICENSE setup.rb]
-  files += Dir.glob('contrib/**/*')
-  files += Dir.glob('benchmark/**/*')
-  files += Dir.glob('doc-api/**/*')
-  s.files       = files
-  s.executables = ['erubis']
-  s.bindir      = 'bin'
-  s.test_file   = 'test/test.rb'
-  #s.add_dependency('abstract', ['>= 1.0.0'])
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rspec'
 end
-
-# Quick fix for Ruby 1.8.3 / YAML bug   (thanks to Ross Bamford)
-if (RUBY_VERSION == '1.8.3')
-  def spec.to_yaml
-    out = super
-    out = '--- ' + out unless out =~ /^---/
-    out
-  end
-end
-
-if $0 == __FILE__
-  #Gem::manage_gems
-  #Gem::Builder.new(spec).build
-  require 'rubygems/gem_runner'
-  Gem::GemRunner.new.run ['build', '$(project).gemspec']
-end
-
-spec

@@ -8,6 +8,7 @@ require 'erubis/generator'
 require 'erubis/converter'
 require 'erubis/evaluator'
 require 'erubis/context'
+require 'erubis/source'
 
 
 module Erubis
@@ -24,10 +25,11 @@ module Erubis
 
     def initialize(input=nil, properties={})
       #@input = input
+
       init_generator(properties)
       init_converter(properties)
       init_evaluator(properties)
-      @src    = convert(input) if input
+      @src    = Source.new convert(input) if input
     end
 
 
@@ -35,7 +37,7 @@ module Erubis
     ## convert input string and set it to @src
     ##
     def convert!(input)
-      @src = convert(input)
+      @src = Source.new convert(input)
     end
 
 
@@ -51,7 +53,7 @@ module Erubis
       timestamp = File.mtime(filename)
       if test(?f, cachename) && timestamp == File.mtime(cachename)
         engine = self.new(nil, properties)
-        engine.src = File.read(cachename)
+        engine.src = Source.new File.read(cachename)
       else
         input = File.open(filename, 'rb') {|f| f.read }
         engine = self.new(input, properties)

@@ -43,21 +43,25 @@ module Erubis
     #++
 
     def add_text(src, text)
-      src << " #{@bufvar} << '" << escape_text(text) << "';" unless text.empty?
+      statement = " #{@bufvar} << '" << escape_text(text) << "';"
+      src << statement unless text.empty?
     end
 
     def add_stmt(src, code)
       #src << code << ';'
-      src << code
-      src << ';' unless code[-1] == ?\n
+      statement = "#{code}"
+      statement << ';' unless code[-1] == ?\n
+      src << statement
     end
 
     def add_expr_literal(src, code)
-      src << " #{@bufvar} << (" << code << ').to_s;'
+      statement = " #{@bufvar} << (" << code << ').to_s;'
+      src << statement
     end
 
     def add_expr_escaped(src, code)
-      src << " #{@bufvar} << " << escaped_expr(code) << ';'
+      statement = " #{@bufvar} << " << escaped_expr(code) << ';'
+      src << statement
     end
 
     def add_expr_debug(src, code)

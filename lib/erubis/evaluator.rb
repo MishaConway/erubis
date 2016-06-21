@@ -51,6 +51,7 @@ module Erubis
 
     ## eval(@src) with binding object
     def result(_binding_or_hash=TOPLEVEL_BINDING)
+      raise "got here"
       _arg = _binding_or_hash
       if _arg.is_a?(Hash)
         _b = binding()
