@@ -43,28 +43,29 @@ module Erubis
     #++
 
     def add_text(src, text)
-      statement = " #{@bufvar} << '" << escape_text(text) << "';"
-      src << statement unless text.empty?
+      statement = escape_text(text)
+      src.add_text statement unless text.empty?
     end
 
     def add_stmt(src, code)
       #src << code << ';'
       statement = "#{code}"
       statement << ';' unless code[-1] == ?\n
-      src << statement
+      src.add_statement statement
     end
 
     def add_expr_literal(src, code)
       statement = " #{@bufvar} << (" << code << ').to_s;'
-      src << statement
+      src.add_expr_literal code
     end
 
     def add_expr_escaped(src, code)
       statement = " #{@bufvar} << " << escaped_expr(code) << ';'
-      src << statement
+      src.add_expr_escaped code, @escapefunc
     end
 
     def add_expr_debug(src, code)
+      raise "went to add_expr_debug"
       code.strip!
       s = (code.dump =~ /\A"(.*)"\z/) && $1
       src << ' $stderr.puts("*** debug: ' << s << '=#{(' << code << ').inspect}");'

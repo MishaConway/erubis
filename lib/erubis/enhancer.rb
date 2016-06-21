@@ -208,12 +208,12 @@ module Erubis
     end
 
     def add_preamble(src)
-      src << "#{@bufvar} = '';"
+      #src << "#{@bufvar} = '';"
     end
 
     def add_postamble(src)
-      src << "\n" unless src[-1] == ?\n
-      src << "#{@bufvar}.to_s\n"
+      src.add_text "\n" unless src[-1] == ?\n
+      #src << "#{@bufvar}.to_s\n"
     end
 
   end
