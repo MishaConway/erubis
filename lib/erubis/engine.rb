@@ -9,6 +9,7 @@ require 'erubis/converter'
 require 'erubis/evaluator'
 require 'erubis/context'
 require 'erubis/source'
+require 'erubis/source_compiler'
 
 
 module Erubis
